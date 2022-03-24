@@ -18,12 +18,10 @@ class MainActivity : AppCompatActivity() {
                 network("http://192.168.1.5:3000/remoteConfigs")
             )
         }
-
+        remoteAppConfig.setDefaultConfig(AppConfig())
         remoteAppConfig.fetch({
             remoteAppConfig.activateFetched()
-            println("QQQQQQ ${remoteAppConfig.get()?.test}")
         }, {
-            println("QQQQQQ1 ${it.message}")
         })
     }
 }

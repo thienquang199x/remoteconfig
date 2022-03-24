@@ -74,6 +74,10 @@ class StorageResourceLocalRepository(
         return root.resolve(getFileName(variant)).toPath()
     }
 
+    private fun getResourcePath(variant: String, lowerSDK:Boolean = false): String {
+        return root.resolve(getFileName(variant)).path
+    }
+
     private fun getResourceFile(variant: String): File? {
         return root.resolve(getFileName(variant)).let {
             if (it.exists()) {
@@ -107,7 +111,12 @@ class StorageResourceLocalRepository(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                 Files.write(getResourcePath(variant), it.readBytes())
             } else {
-                getResourceFile(variant)?.writeBytes(it.readBytes())
+                val file = File(getResourcePath(variant, lowerSDK = true))
+                if (file.exists()){
+                    file.deleteOnExit()
+                }
+                file.createNewFile()
+                file.writeBytes(it.readBytes())
             }
         }
     }
